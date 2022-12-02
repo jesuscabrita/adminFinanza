@@ -1,7 +1,7 @@
 import fastify from "fastify";
 import { app } from "./app";
 import blipp from "fastify-blipp";
-import { PORT } from "./config";
+import { ACKEE_PORT } from "./config";
 
 
 const server = fastify({
@@ -22,7 +22,7 @@ server.register(app);
 
 server
   .listen({
-    port: parseInt(PORT),
+    port: parseInt(ACKEE_PORT),
     host: "0.0.0.0",
   })
   .then(() => {

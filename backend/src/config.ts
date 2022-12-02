@@ -9,5 +9,5 @@ const checkEnv = (enVar: string) => {
     return envVariable;
 };
 
-export const MONGODB_URL = checkEnv("MONGODB_URL");
-export const PORT = checkEnv("PORT");
+export const ACKEE_MONGODB = checkEnv("ACKEE_MONGODB");
+export const ACKEE_PORT = checkEnv("ACKEE_PORT");

@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "build": "tsc",
+    "build": "yarn build",
     "postinstall": "yarn run build",
     "start": "node dist/server.js",
     "seed": "ts-node src/seed.ts"

@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import { MONGODB_URL } from "./config";
+import { ACKEE_MONGODB } from "./config";
 import { AdminModel } from "./model/admin.model";
 
 (async () => {
-    await mongoose.connect(MONGODB_URL);
+    await mongoose.connect(ACKEE_MONGODB);
 
     // Elimina todos los product en la colección de mongodb
     try {
