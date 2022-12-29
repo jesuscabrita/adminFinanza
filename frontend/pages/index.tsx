@@ -31,6 +31,9 @@ const Index = ({ last_update , value_buy, value_sell,}) => {
     const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
     const { user } = useAuth0();
     const [light] = useContext(Context);
+    const [page, setPage]= useState(1);
+    const [current, setCurrent]= useState(0);
+    const cantidad = 3;
 
     useQuery(["/v2/latest"], useDolar, {
         refetchOnWindowFocus: false,
@@ -55,7 +58,10 @@ const Index = ({ last_update , value_buy, value_sell,}) => {
             setNoticia(data.articles);
         },
     });
-    console.log(noticia);
+    const filterArray = (posicion, title, array, cantidad)=>{
+        const newFilter =array.filter(info => info.title.includes(title))
+        return newFilter.slice( posicion, posicion % 2 ? posicion + 1 : posicion + cantidad)
+    }
     
     return (
         <>
@@ -114,9 +120,16 @@ const Index = ({ last_update , value_buy, value_sell,}) => {
                     }}>
                     <Grid item>Noticias Globales</Grid>
                 </Grid>
-                    <NoticiaHome
-                    data={noticia[0]}
-                    />
+                <Grid sx={{display:'flex',justifyContent:'space-around' }}>
+                {noticia && filterArray(current, '', noticia, cantidad).map( news =>{
+                    return(
+                        <NoticiaHome
+                        data={news}
+                        />
+                        )
+                        
+                    })} 
+                    </Grid>
                 
                 </Grid>
             ) : (

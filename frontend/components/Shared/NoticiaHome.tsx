@@ -20,17 +20,17 @@ export const NoticiaHome =({data})=>{
     const [current, setCurrent]= useState(0);
     return(
         <Grid item sx={{
-            border:'solid 1px red',
-            minWidth: '300px',
+            minWidth: '370px',
             width:'200px',
             }}>
             <Grid item sx={{wordBreak:'break-word'}}>
-                {data?.title}
+                {data?.title.length > 90 ?  data?.title.slice(0,-10)+ '...' : data?.title}
             </Grid>
             <img 
-            src={data?.urlToImage} 
-            alt={data?.description} 
-            style={{height:'200px', width:'300px' }} 
+            src={data?.urlToImage ? data?.urlToImage :'https://i.ytimg.com/vi/PG1tUVv8XWQ/maxresdefault.jpg'} 
+            alt={data?.description } 
+            style={{height:'200px', width:'370px' }} 
+            onError={ev => ev.target }
             />           
         </Grid>
     )
