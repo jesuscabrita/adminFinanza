@@ -1,95 +1,127 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { Grid, useMediaQuery } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { Tarjeta } from "../components/Shared/Tarjeta";
 import { TarjetaEuro } from "../components/Shared/TarjetaEuro";
 import { TarjetaNoti } from "../components/Shared/TarjetaNoti";
-import { TarjetaRiesgo } from "../components/Shared/TarjetaRiesgo";
 import { useDolar } from "../service/dolar";
 import { useEuro } from "../service/euro";
-import { useRiesgoPais } from "../service/riesgo";
+import { useNoticias } from "../service/noticias";
+import { moneda } from "../utils/utils";
+import { MdWavingHand as Saludo } from 'react-icons/md';
+import Context from "../context/contextPrincipal";
+import moment from 'moment';
+import { NoticiaHome } from "../components/Shared/NoticiaHome";
+moment.defineLocale('es', {
+    months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+    monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+    weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+    weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+    weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+    })
 
-const Index = ({ last_update , value_buy, value_sell, valor }) => {
+const Index = ({ last_update , value_buy, value_sell,}) => {
     const [money, setMoney] = useState({last_update, value_sell, value_buy });
     const [fecha, setFecha] = useState({last_update });
     const [oficial, setOficial] = useState({ value_sell, value_buy });
     const [euroOficial, setEuroOficial] = useState({ value_sell, value_buy });
     const [euroBlue, setEuroBlue] = useState({ value_sell, value_buy });
-    const [riesgo, setRiesgo] = useState({ valor });
+    const [noticia, setNoticia] = useState([]);
     const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
+    const { user } = useAuth0();
+    const [light] = useContext(Context);
+
     useQuery(["/v2/latest"], useDolar, {
         refetchOnWindowFocus: false,
         onSuccess: (data) => {
             setMoney(data.blue);
-        },
-    });
-    useQuery(["/v2/latest"], useDolar, {
-        refetchOnWindowFocus: false,
-        onSuccess: (data) => {
             setOficial(data.oficial);
-        },
-    });
-    useQuery(["/v2/latest"], useDolar, {
-        refetchOnWindowFocus: false,
-        onSuccess: (data) => {
             setFecha(data);
         },
     });
+
     useQuery(["/v2/latest"], useEuro, {
         refetchOnWindowFocus: false,
         onSuccess: (data) => {
             setEuroOficial(data.oficial_euro);
-        },
-    });
-    useQuery(["/v2/latest"], useEuro, {
-        refetchOnWindowFocus: false,
-        onSuccess: (data) => {
             setEuroBlue(data.blue_euro);
         },
     });
-    useQuery(["/apiriesgopais"], useRiesgoPais, {
+    
+    useQuery([""], useNoticias, {
         refetchOnWindowFocus: false,
         onSuccess: (data) => {
-            setRiesgo(data);
+            setNoticia(data.articles);
         },
     });
-
-    const moneda = (valor) => {
-        const valorDolar = valor ?? 0;
-        return Number(valorDolar).toLocaleString("es-AR", {
-            style: "currency",
-            currency: "ARS",
-            minimumFractionDigits: 2,
-        })
-    }
-
+    console.log(noticia);
+    
     return (
         <>
             {!mobile ? (
-                <Grid container item sx={{ padding: "20px", flexDirection: 'row', alignItems: 'center', gap: '12px', width: '80%', height: '100vh',}}>
-                    <Grid item container sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 0fr)', gridGap: '10px', gridAutoRows: 'minmax(100px, auto)', gap: '12px',}}>
-                        <Tarjeta
-                            compra={moneda(money.value_buy)}
-                            venta={moneda(money.value_sell)}
-                            fecha={fecha.last_update}
-                            ofiCompra={moneda(oficial.value_buy)}
-                            ofiVenta={moneda(oficial.value_sell)}
-                        />
-                        <TarjetaRiesgo valor={riesgo.valor}/>
-                        <TarjetaEuro
-                            compraBlue={moneda(euroBlue.value_buy)}
-                            ventaBlue={moneda(euroBlue.value_sell)}
-                            compraOficial={moneda(euroOficial.value_buy)}
-                            ventaOficial={moneda(euroOficial.value_sell)}
-                        />
-                        <Grid item container sx={{ marginTop: '-120px',}}>
-                        <TarjetaNoti/>
-                        </Grid>
-                    </Grid>
+                <Grid item sx={{height:'100vh', width:'100%' }}>
+                {user ? 
+                <Grid container sx={{
+                    fontSize:'25px',
+                    alignItems:'center',
+                    justifyContent:'center',
+                    color:light ? "var(--zero)" : "var(--ceroN)",
+                    marginTop:'10px'
+                    }}>
+                    Hola Bienvenido {user.name}!<Saludo/>
+                </Grid> 
+                : null } 
+                <Grid item sx={{
+                    display:'flex',
+                    flexDirection:'column', 
+                    alignItems:'center',
+                    justifyContent:'center', 
+                    color:light ? "var(--zero)" : "var(--ceroN)",
+                    fontSize:'17px',
+                    }}>
+                    <Grid item>Fecha del Mercado Argentino</Grid>
+                    <Grid item>{moment(fecha.last_update).format('MMMM Do YYYY, h:mm:ss a')}</Grid>
+                </Grid>
+                <Grid sx={{
+                    display:'flex', 
+                    flexDirection:'row',
+                    justifyContent:'center', 
+                    gap:'30px',
+                    marginTop:'18px'
+                    }}>
+                    <Tarjeta
+                    compra={moneda(money.value_buy)}
+                    venta={moneda(money.value_sell)}
+                    ofiCompra={moneda(oficial.value_buy)}
+                    ofiVenta={moneda(oficial.value_sell)}
+                    />
+                    <TarjetaEuro
+                    compraBlue={moneda(euroBlue.value_buy)}
+                    ventaBlue={moneda(euroBlue.value_sell)}
+                    compraOficial={moneda(euroOficial.value_buy)}
+                    ventaOficial={moneda(euroOficial.value_sell)}
+                    />
+                </Grid>
+                <Grid item sx={{
+                    display:'flex',
+                    flexDirection:'row', 
+                    alignItems:'center',
+                    justifyContent:'center', 
+                    color:light ? "var(--zero)" : "var(--ceroN)",
+                    fontSize:'20px',
+                    marginTop:'20px',
+                    }}>
+                    <Grid item>Noticias Globales</Grid>
+                </Grid>
+                    <NoticiaHome
+                    data={noticia[0]}
+                    />
+                
                 </Grid>
             ) : (
                 <Grid container item sx={{ padding: "20px", flexDirection: 'column', alignItems: 'center', gap: '12px'}}>
-                    <Tarjeta
+                    {/* <Tarjeta
                         compra={moneda(money.value_buy)}
                         venta={moneda(money.value_sell)}
                         fecha={fecha.last_update}
@@ -103,7 +135,7 @@ const Index = ({ last_update , value_buy, value_sell, valor }) => {
                         ventaOficial={moneda(euroOficial.value_sell)}
                     />
                     <TarjetaRiesgo valor={riesgo.valor}/>
-                    <TarjetaNoti/>
+                    <TarjetaNoti/> */}
                 </Grid>
             )
             }

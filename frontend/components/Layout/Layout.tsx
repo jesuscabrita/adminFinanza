@@ -19,11 +19,15 @@ export const Layout = ({ children }) => {
   return (
     <>
       {!mobile ? (
-        <Grid container item sx={{width: '100%', background: light ? "var(--cero)" : "var(--dark)",}}>
-          <Grid item container xs={16}>
+        <Grid item sx={{
+          width: '100%',
+          height:'100%',
+          background: light ? "var(--cero)" : "var(--dark)",
+          display:'flex',
+          flexDirection:'row'
+          }}>
             <Navbar />
           {children}
-          </Grid>
         </Grid>
       ) : (
         <Grid container item sx={{height: "150vh", background: light ? "var(--cero)" : "var(--dark)",}}>

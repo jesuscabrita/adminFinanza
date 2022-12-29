@@ -4,7 +4,7 @@ import Context from "../../context/contextPrincipal";
 import { GiNewspaper as Noti } from "react-icons/gi";
 import { GiSandsOfTime as Reloj } from "react-icons/gi";
 
-export const TarjetaNoti = () => {
+export const TarjetaNoti = ({data}) => {
     const [light] = useContext(Context);
     const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
     const tablet = useMediaQuery("(max-width:950px)", { noSsr: true });
@@ -15,7 +15,7 @@ export const TarjetaNoti = () => {
             </Grid>
             <Grid item container mt={!mobile ? 12 : 0} sx={{ justifyContent: "center", alignItems: "center", color: light ? "var(--zero)" : "var(--cero3)",}}>
                 <Reloj size={35} />
-                <Grid>Proximamente</Grid>
+                <Grid>Proximamente {data.author}</Grid>
             </Grid>
         </Grid>
     );
