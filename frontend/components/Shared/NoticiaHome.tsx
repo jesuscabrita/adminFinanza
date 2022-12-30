@@ -24,7 +24,7 @@ export const NoticiaHome =({data})=>{
             width:'200px',
             }}>
             <Grid item sx={{wordBreak:'break-word'}}>
-                {data?.title.length > 90 ?  data?.title.slice(0,-10)+ '...' : data?.title}
+                {data?.title.length > 90 ?  data?.title.slice(0,-20)+ '...' : data?.title}
             </Grid>
             <img 
             src={data?.urlToImage ? data?.urlToImage :'https://i.ytimg.com/vi/PG1tUVv8XWQ/maxresdefault.jpg'} 

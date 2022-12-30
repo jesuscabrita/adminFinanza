@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, useMediaQuery } from "@mui/material";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useContext, useState } from "react";
 import Context from "../../context/contextPrincipal";
@@ -9,6 +9,7 @@ import { AiOutlineDollarCircle as Dolar } from "react-icons/ai";
 export const Tarjeta = ({ compra, venta, ofiCompra, ofiVenta }) => {
     const [light] = useContext(Context);
     const [money, setMoney] = useState([]);
+    const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
     const { isLoading } = useQuery(["/v2/latest"], useDolar, {
         refetchOnWindowFocus: false,
         onSuccess: (data) => {
@@ -19,7 +20,7 @@ export const Tarjeta = ({ compra, venta, ofiCompra, ofiVenta }) => {
     return (
     <Grid sx={{
             minWidth: '300px',
-            width:'400px',
+            width: !mobile ? '400px': '330px',
             height: "100%", 
             borderRadius: "16px", 
             background: 'var(--hazard)', 

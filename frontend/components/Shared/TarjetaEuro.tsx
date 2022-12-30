@@ -9,6 +9,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 export const TarjetaEuro = ({ compraOficial, ventaOficial, ventaBlue, compraBlue  }) => {
     const [light] = useContext(Context);
     const [euro, setEuro] = useState([]);
+    const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
     const { isLoading } = useQuery(["/v2/latest"], useEuro, {
         refetchOnWindowFocus: false,
         onSuccess: (data) => {
@@ -19,7 +20,7 @@ export const TarjetaEuro = ({ compraOficial, ventaOficial, ventaBlue, compraBlue
     return (
     <Grid sx={{
             minWidth: '300px',
-            width:'400px',
+            width:!mobile ? '400px': '330px',
             height: "100%", 
             borderRadius: "16px", 
             background: 'var(--activo)', 

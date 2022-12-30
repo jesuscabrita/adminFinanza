@@ -30,9 +30,13 @@ export const Layout = ({ children }) => {
           {children}
         </Grid>
       ) : (
-        <Grid container item sx={{height: "150vh", background: light ? "var(--cero)" : "var(--dark)",}}>
+        <Grid item sx={{
+          width: '100%',
+          height:'100%', 
+          background: light ? "var(--cero)" : "var(--dark)",
+          }}>
           <Navbar />
-          <Grid sx={{width: '100%',}}>{children}</Grid>
+          {children}
         </Grid>
       )}
     </>
