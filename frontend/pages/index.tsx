@@ -4,7 +4,6 @@ import { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { Tarjeta } from "../components/Shared/Tarjeta";
 import { TarjetaEuro } from "../components/Shared/TarjetaEuro";
-import { TarjetaNoti } from "../components/Shared/TarjetaNoti";
 import { useDolar } from "../service/dolar";
 import { useEuro } from "../service/euro";
 import { useNoticias } from "../service/noticias";
@@ -12,10 +11,11 @@ import { moneda } from "../utils/utils";
 import { MdWavingHand as Saludo } from 'react-icons/md';
 import Context from "../context/contextPrincipal";
 import moment from 'moment';
-import { NoticiaHome } from "../components/Shared/NoticiaHome";
 import {BsClipboardData as Datas } from 'react-icons/bs'
 import { Resumen } from "../components/Shared/Resumen";
 import { useAdmin } from "../hooks/useAdmin";
+import { AiOutlineFileSearch as Buscar } from 'react-icons/ai';
+import { useRadioGroupContext } from "@chakra-ui/react";
 moment.defineLocale('es', {
     months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
     monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
@@ -35,9 +35,6 @@ const Index = ({ last_update , value_buy, value_sell,}) => {
     const { user } = useAuth0();
     const [light] = useContext(Context);
     const { data: adminis, mutate } = useAdmin();
-    const [page, setPage]= useState(1);
-    const [current, setCurrent]= useState(0);
-    const cantidad = 3;
 
     useQuery(["/v2/latest"], useDolar, {
         refetchOnWindowFocus: false,
@@ -62,15 +59,11 @@ const Index = ({ last_update , value_buy, value_sell,}) => {
             setNoticia(data.articles);
         },
     });
-    const filterArray = (posicion, title, array, cantidad)=>{
-        const newFilter =array.filter(info => info.title.includes(title))
-        return newFilter.slice( posicion, posicion % 2 ? posicion + 1 : posicion + cantidad)
-    }
     
     return (
-        <>
-            {!mobile ? (
-                <Grid item sx={{height:'100vh', width:'100%'}}>
+    <>
+        {!mobile
+        ?   <Grid item sx={{height:'100vh', width:'100%'}}>
                 {user ? 
                 <Grid container sx={{
                     fontSize:'25px',
@@ -126,24 +119,29 @@ const Index = ({ last_update , value_buy, value_sell,}) => {
                     <Grid item>Resumen</Grid>
                     <Datas/>
                 </Grid>
-                {adminis ?<Grid item sx={{
-                    display:'flex',
-                    alignItems:'center',
-                    justifyContent:'center', 
-                    }}>
-                    <Resumen
-                    admin={adminis}
-                    />
-                </Grid> : <Grid item sx={{
-                    display:'flex',
-                    alignItems:'center',
-                    justifyContent:'center', 
-                    }}>loading...</Grid>} 
-                
-                </Grid>
-            ) : (
-
-            <Grid container item sx={{
+                {adminis 
+                ? <Grid item sx={{
+                        display:'flex',
+                        alignItems:'center',
+                        justifyContent:'center', 
+                        }}>
+                        <Resumen admin={adminis}/>
+                    </Grid> 
+                : <Grid item sx={{
+                        display:'flex',
+                        flexDirection:'column',
+                        alignItems:'center',
+                        justifyContent:'center', 
+                        color: light ? "var(--zero)" : "var(--ceroN)",
+                        marginTop:'50px'
+                        }}>
+                        {'No tiene datos en el resumen...'}
+                        <Buscar size={65}/>
+                    </Grid>}
+                    
+            </Grid>
+        : 
+                <Grid container item sx={{
                 height:'130vh', 
                 width:'100%', 
                 display:'flex', 
@@ -172,7 +170,6 @@ const Index = ({ last_update , value_buy, value_sell,}) => {
                     <Grid item>Fecha del Mercado Argentino</Grid>
                     <Grid item>{moment(fecha.last_update).format('MMMM Do YYYY, h:mm:ss a')}</Grid>
                 </Grid> 
-
                 <Grid sx={{
                     display:'flex', 
                     flexDirection:'column',
@@ -206,24 +203,29 @@ const Index = ({ last_update , value_buy, value_sell,}) => {
                     <Grid item>Resumen</Grid>
                     <Datas/>
                 </Grid>
-                {adminis ?<Grid item sx={{
-                    display:'flex',
-                    alignItems:'center',
-                    justifyContent:'center', 
-                    }}>
-                    <Resumen
-                    admin={adminis}
-                    />
-                </Grid> : <Grid item sx={{
-                    display:'flex',
-                    alignItems:'center',
-                    justifyContent:'center', 
-                    }}>loading...</Grid>}
-
+                {adminis 
+                ? <Grid item sx={{
+                        display:'flex',
+                        alignItems:'center',
+                        justifyContent:'center', 
+                        }}>
+                        <Resumen admin={adminis}/>
+                    </Grid> 
+                : <Grid item sx={{
+                        display:'flex',
+                        flexDirection:'column',
+                        alignItems:'center',
+                        justifyContent:'center', 
+                        color: light ? "var(--zero)" : "var(--ceroN)",
+                        marginTop:'50px'
+                        }}>
+                        {'No tiene datos en el resumen...'}
+                        <Buscar size={65}/>
+                    </Grid>}
             </Grid>
-            )
-            }
-        </>
+            
+        }
+    </>
     );
 };
 export default Index;

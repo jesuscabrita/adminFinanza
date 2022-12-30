@@ -81,10 +81,8 @@ export const Navbar: React.FC = () => {
   const [show, setShow] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const { loginWithRedirect, user, logout } = useAuth0();
-
   const Menuitem = styled(MenuItem)`:hover {background-color: var(--terciario);border-radius: 0px 0px 25px 0px;}`;
-
-  const onClickMenuIcon = () => {setCollapsed(!collapsed);};
+  const onClickMenuIcon = () => {setCollapsed(!collapsed)};
 
   const setChangeDark = () => {
     setLight(light ? false : true);
@@ -95,22 +93,47 @@ export const Navbar: React.FC = () => {
     <>
       {!mobile ? (
         <Grid>
-          <ProSidebar className="pro-sidebar-inner" width={"200px"} collapsed={!tablet ? collapsed : true}>
+          <ProSidebar 
+            className="pro-sidebar-inner" 
+            width={"200px"} 
+            collapsed={!tablet ? collapsed : true}>
             {!user && (
-              <Grid item mt={4} onClick={() => loginWithRedirect()} sx={{ display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",}}>
+              <Grid 
+                item mt={4} 
+                onClick={() => loginWithRedirect()} 
+                sx={{ 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center", 
+                  cursor: "pointer",
+                  }}>
                 <Login />
                 Login
               </Grid>
             )}
             {user && (
-              <Grid item mt={4} sx={{display: "flex", alignItems: "center", justifyContent: "center",}}>
-                <StyledBadge overlap="circular" anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} variant="dot">
-                  <Avatar alt={user.name} sx={{ width: 60, height: 60 }} src={user.picture ? user.picture : "https://bysperfeccionoral.com/wp-content/uploads/2020/01/136-1366211_group-of-10-guys-login-user-icon-png.jpg"}/>
+              <Grid 
+                item 
+                mt={4} 
+                sx={{display: "flex", alignItems: "center", justifyContent: "center",}}>
+                <StyledBadge 
+                    overlap="circular" 
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} 
+                    variant="dot">
+                  <Avatar 
+                      alt={user.name} 
+                      sx={{ width: 60, height: 60 }} 
+                      src={user.picture 
+                      ? user.picture 
+                      : "https://bysperfeccionoral.com/wp-content/uploads/2020/01/136-1366211_group-of-10-guys-login-user-icon-png.jpg"}
+                  />
                 </StyledBadge>
               </Grid>
             )}
             <SidebarHeader>
-              <Grid onClick={onClickMenuIcon} sx={{float: "right", margin: "10px", cursor: "pointer",}}>
+              <Grid 
+                  onClick={onClickMenuIcon} 
+                  sx={{float: "right", margin: "10px", cursor: "pointer",}}>
                 {collapsed ? <ArrowRight size={25} /> : <ArrowLeft size={25} />}
               </Grid>
             </SidebarHeader>
@@ -123,19 +146,43 @@ export const Navbar: React.FC = () => {
                 <Menuitem><ButtonNav href="/noticias">Noticias</ButtonNav></Menuitem>
               </SubMenu>
               <Menuitem icon={<Setting size={20} />}><ButtonNav href="/configuracion">Configuracion</ButtonNav></Menuitem>
-            {user && (<Menuitem icon={<Cerrar size={20} />}><Grid onClick={() => logout({ returnTo: window.location.origin })}>Cerrar Sesion</Grid></Menuitem>)}   
-              <Menuitem icon={<FormControlLabel style={{ marginLeft: "25px" }} onClick={() => setChangeDark()} label="" control={<MaterialUISwitch defaultChecked={!light ? true : false}/>}/>}></Menuitem>
+            {user && 
+                <Menuitem icon={<Cerrar size={20} />}>
+                  <Grid onClick={() => logout({ returnTo: window.location.origin })}>
+                    Cerrar Sesion
+                  </Grid>
+                </Menuitem>}   
+              <Menuitem 
+                  icon={<FormControlLabel style={{ marginLeft: "25px" }}
+                  onClick={() => setChangeDark()}
+                  label="" 
+                  control={<MaterialUISwitch defaultChecked={!light ? true : false}/>}
+                />}>
+              </Menuitem>
             </Menu>
           </ProSidebar>
         </Grid>
       ) : (
-        <AppBar position="fixed" color="primary" sx={{ top: "auto", bottom: 0 }} className="MuiPaper-root-MuiAppBar-root">
+        <AppBar 
+            position="fixed" 
+            color="primary" 
+            sx={{ top: "auto", bottom: 0 }} 
+            className="MuiPaper-root-MuiAppBar-root">
           <Toolbar>
-            <IconButton color="inherit" aria-label="open drawer" onClick={() => {setShow(!show);}}>
+            <IconButton 
+                color="inherit" 
+                aria-label="open drawer" 
+                onClick={() => {setShow(!show)}}>
               {!show ? <MenuIcon /> : <Exit />}
             </IconButton>
             {show ? (
-              <Grid sx={{background: light ? "var(--segundario)" : "var(--segundario)",}} className="absolute inset-x-0 bottom-14 w-screen rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Grid 
+                sx={{background: light ? "var(--segundario)" : "var(--segundario)",}} 
+                className="absolute inset-x-0 bottom-14 w-screen rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                {!user &&
+                <Grid onClick={() => loginWithRedirect()}>
+                  <ButtonNavbar href=''><Login size={20} />Login</ButtonNavbar>
+                </Grid> }
                 <Grid>
                   <ButtonNavbar href="/manage"><Progress size={20} />Administrar</ButtonNavbar>
                 </Grid>
@@ -154,15 +201,22 @@ export const Navbar: React.FC = () => {
                 <Grid sx={{ marginBottom: "15px" }}>
                   <ButtonNavbar href="/configuracion"><Setting size={20} />Configuracion</ButtonNavbar>
                 </Grid>
+                <Grid onClick={() => logout({ returnTo: window.location.origin })} sx={{ marginBottom: "15px" }}>
+                  <ButtonNavbar href=""><Cerrar size={20} />Cerrar Sesion</ButtonNavbar>
+                </Grid>
               </Grid>
             ) : null}
             <Box sx={{ flexGrow: 1 }} />
             <IconButton style={{ padding: "6px" }} color="inherit" aria-label="open drawer">
-              <ButtonNavbar href="/"><Home size={20} /></ButtonNavbar>
+              <ButtonNavbar href="/"><Home size={20}/></ButtonNavbar>
             </IconButton>
             <Box sx={{ flexGrow: 1 }} />
             <IconButton color="inherit">
-              <FormControlLabel control={<MaterialUISwitch defaultChecked={!light ? true : false} onClick={() => setChangeDark()}/>} label=""/>
+              <FormControlLabel 
+                control={<MaterialUISwitch defaultChecked={!light ? true : false} 
+                onClick={() => setChangeDark()}/>} 
+                label=""
+              />
             </IconButton>
           </Toolbar>
         </AppBar>

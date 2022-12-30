@@ -22,3 +22,7 @@ export const filterTipo =(array, tipo)=>{
     throw new Error(err);
     }
 }
+export const filterArray = (posicion, title, array, cantidad)=>{
+    const newFilter =array.filter(info => info.title.includes(title))
+    return newFilter.slice( posicion, posicion % 2 ? posicion + 1 : posicion + cantidad)
+}
