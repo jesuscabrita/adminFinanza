@@ -87,13 +87,13 @@ export const Tables = () => {
         { id: 'Ingreso / Egreso', label: 'Ingreso / Egreso', minWidth: 300 },
         { id: 'Monto', label: 'Monto', minWidth: 100 },
         { id: 'Moneda', label: 'Moneda', minWidth: 170, align: 'right',},
-        { id: 'Estatus', label: 'Estatus', minWidth: 170, align: 'right',},
+        { id: 'Estatus', label: 'Estatus', minWidth: 270, align: 'right',},
         { id: 'Accion', label: 'Accion', minWidth:170, align: 'right',},
         ];
 console.log('admin', adminis);
 
     return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', marginTop:'10px' }}>
         <TableContainer sx={{ maxHeight: 300 }}>
             <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -102,7 +102,11 @@ console.log('admin', adminis);
                         <TableCell
                         key={column.id}
                         align={column.align}
-                        style={{ minWidth: column.minWidth }}
+                        style={{ 
+                            minWidth: column.minWidth, 
+                            background: "var(--segundario)",
+                            color: "var(--cero)",  
+                        }}
                         >
                         {column.label}
                         </TableCell>
