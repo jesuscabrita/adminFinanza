@@ -28,19 +28,20 @@ export const TarjetaUser = ({admin}) => {
         });
     };
 
-    const filterPago =(array, tipo)=>{
-        const newFilter = array.filter(info => info.pago === tipo);
+    const filterPago =(array, pago, tipo)=>{
+        const newFilter = array.filter(info => info.pago === pago && info.tipo === tipo);
         return newFilter;
     }
-    const filterTipo =(array, tipo)=>{
-        const newFilter = array.filter(info => info.tipo === tipo);
+    const filterTipo =(array, pago, tipo)=>{
+        const newFilter = array.filter(info => info.pago === pago && info.tipo === tipo);
         return newFilter;
     }
 
 
-    let ingreso =filterTipo(admin, '+').reduce((acumulador, actual) => acumulador + actual.monto, 0)
+    let ingreso =filterTipo(admin, 'si','+').reduce((acumulador, actual) => acumulador + actual.monto, 0)
+    console.log('ingreso', ingreso);
     
-    let egreso = filterPago(admin, 'si').reduce((acumulador, actual) => acumulador + actual.monto, 0)
+    let egreso = filterPago(admin, 'si','-').reduce((acumulador, actual) => acumulador + actual.monto, 0)
     
     let numero = formatoPorcentaje(egreso / ingreso);
     
