@@ -25,7 +25,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { AiOutlineLogin as Login } from "react-icons/ai";
 import Avatar from "@mui/material/Avatar";
 import Badge from '@mui/material/Badge';
-import {RiLogoutCircleFill as Cerrar} from 'react-icons/ri';
+import { RiLogoutCircleFill as Cerrar } from 'react-icons/ri';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,

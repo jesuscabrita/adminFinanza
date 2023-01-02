@@ -15,7 +15,6 @@ import {BsClipboardData as Datas } from 'react-icons/bs'
 import { Resumen } from "../components/Shared/Resumen";
 import { useAdmin } from "../hooks/useAdmin";
 import { AiOutlineFileSearch as Buscar } from 'react-icons/ai';
-import { useRadioGroupContext } from "@chakra-ui/react";
 moment.defineLocale('es', {
     months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
     monthsShort: 'Enero._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
@@ -34,7 +33,7 @@ const Index = ({ last_update , value_buy, value_sell,}) => {
     const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
     const { user } = useAuth0();
     const [light] = useContext(Context);
-    const { data: adminis, mutate } = useAdmin();
+    const { data: adminis, mutate} = useAdmin();
 
     useQuery(["/v2/latest"], useDolar, {
         refetchOnWindowFocus: false,
