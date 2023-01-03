@@ -7,7 +7,8 @@ export const moneda = (valor) => {
     })
 }
 export const formatoPorcentaje = (valor) => {
-    return Number(valor).toLocaleString("es-AR", {
+    const valorDolar = valor ?? 0;
+    return Number(valorDolar).toLocaleString("es-AR", {
         style: "percent",
         minimumFractionDigits: 2,
     });
@@ -28,6 +29,11 @@ export const filterTipo =(array, tipo)=>{
     throw new Error(err);
     }
 }
+export const filterDuo =(array, pago, tipo)=>{
+    const newFilter = array.filter(info => info.pago === pago && info.tipo === tipo);
+    return newFilter;
+}
+
 export const filterArray = (posicion, title, array, cantidad)=>{
     const newFilter =array.filter(info => info.title.includes(title))
     return newFilter.slice( posicion, posicion % 2 ? posicion + 1 : posicion + cantidad)

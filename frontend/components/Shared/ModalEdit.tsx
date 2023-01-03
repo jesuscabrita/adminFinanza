@@ -1,70 +1,70 @@
-import { Grid, useMediaQuery } from "@mui/material";
-import { useContext, useState } from "react";
+import { Grid } from "@mui/material";
 import Context from "../../context/contextPrincipal";
+import { useContext, useState } from "react";
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 import TextField from "@mui/material/TextField";
+import { MdPostAdd as Idd } from "react-icons/md";
+import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { MdPostAdd as Idd } from "react-icons/md";
-import { useAuth0 } from "@auth0/auth0-react";
-import { create_Admin } from "../../lib/admin";
-import { alertaSubmit } from "../../utils/alertas";
 
-export const Form = () => {
-    const [light] = useContext(Context);
-    const [tipo, setTipo] = useState("");
-    const [detalleARS, setDetalle] =useState('');
-    const [monto, setMonto] =useState(0);
-    const { getAccessTokenSilently } = useAuth0();
-    const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setTipo(event.target.value);
+const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
     };
 
-    const submit = async (e)=>{
-        e.preventDefault();
-        const token = await getAccessTokenSilently();
-        await create_Admin({
-            detalleARS,
-            monto,
-            tipo,
-            pago: "no"
-        }, token)
-        alertaSubmit(create_Admin)
-        setDetalle('')
-        setTipo('')
-        setMonto(0)
-    }
+export const ModalEdit =({
+    open, 
+    setOpen,
+    admin, 
+    })=>{
+    const [light] = useContext(Context);
+    const handleClose = () => setOpen(false);
+    const [form , setForm] = useState({detalleARS: admin.detalleARS, monto: admin.monto, tipo: admin.tipo});
 
-    return (
-        <Grid sx={{
-            width: !mobile ? '600px' : '330px',
-            height: "100%", 
-            borderRadius: "16px",  
-            paddingBottom:'16px',
-            display:'flex',
-            flexDirection:'column',
-            gap:'10px'
-            }}>
-                <Grid>
-            <FormControl variant="filled" sx={{ m: 0, minWidth: 155, height:'50px'}}>
+    const changeForm = e => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.name === 'Monto' ? parseInt(e.target.value) : e.target.value
+        })
+    }
+    
+    return(
+        <Grid 
+            item 
+            container 
+            justifyContent={"space-between"} 
+            sx={{
+                color: light ? "var(--terciario)" : "var(--cero3)", 
+                fontSize: "14.5px",
+                }}>
+                <Modal open={open} onClose={handleClose}>
+                    <Box sx={style}>
+                <Grid>Proximamente podras editar</Grid>
+                    <FormControl variant="filled" sx={{ m: 0, minWidth: 155, height:'50px', marginBottom:'10px'}}>
                 <InputLabel style={{ color: light ? "var(--terciario)" : "var(--cero3)" }}>
                         Ingreso
                 </InputLabel>
-                    <Select value={tipo} onChange={handleChange}>
+                    <Select value={form.tipo} onChange={changeForm}>
                         <MenuItem style={{ display: "flex" }} value={'+'}>+</MenuItem>
                         <MenuItem style={{ display: "flex" }} value={'-'}>-</MenuItem>
                     </Select>
                 </FormControl>
-                </Grid>
-                <TextField 
+                    <TextField 
                     label="Detalle" 
-                    value={detalleARS} 
+                    value={form.detalleARS} 
                     variant="filled" 
                     autoComplete="false"
-                    onChange={(e)=>setDetalle(e.target.value)}
+                    onChange={changeForm}
                     helperText="Es requerido el detalle"
                     sx={{
                         width:'100%',
@@ -75,10 +75,10 @@ export const Form = () => {
                 />
                 <TextField 
                     label="Monto" 
-                    value={Number(monto)} 
+                    value={Number(form.monto)} 
                     type="number" 
                     variant="filled"
-                    onChange={(e)=>setMonto(parseInt(e.target.value))}
+                    onChange={changeForm}
                     InputLabelProps={{shrink: true,}}
                     autoComplete='false'
                     sx={{
@@ -89,7 +89,7 @@ export const Form = () => {
                 <Grid 
                     item 
                     container 
-                    onClick={submit} 
+                    mt={2}
                     sx={{ 
                         background: "var(--primario)", 
                         width: "70px", 
@@ -105,6 +105,8 @@ export const Form = () => {
                         color: "white",
                         }} size={30}/>
                 </Grid>
-            </Grid>
-    );
-};
+                    </Box>
+                </Modal>
+        </Grid>
+    )
+}

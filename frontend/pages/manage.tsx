@@ -1,4 +1,4 @@
-import { Box, Grid, useMediaQuery } from "@mui/material";
+import { Grid, useMediaQuery } from "@mui/material";
 import { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { Form } from "../components/Shared/Form";
@@ -12,56 +12,33 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { BiLoader as Load} from 'react-icons/bi';
 import { FaUserCircle as User } from 'react-icons/fa';
 import { GiProgression as Progress } from "react-icons/gi";
+import { Skeletones, SkeletonesForm, SkeletonesOne } from "../components/Shared/Skeleton";
 
 const Manage = ({detalleARS, monto, tipo}) => {
     const [light] = useContext(Context);
     const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
-    const [admin, setAdmin] = useState({detalleARS, monto, tipo});
-
-    useQuery(['admin'], adminGet, {
-        refetchOnWindowFocus: false,
-        onSuccess: data => {
-            setAdmin(data)
-        }
-    })
-
-    // const filterTipo =(array, tipo)=>{
-    //     const newFilter = array.filter(info => info.tipo.includes(tipo));
-    //     return newFilter;
-    // }
-
     const { data: adminis, mutate } = useAdmin();
-
-    const { loginWithRedirect, user, logout ,loginWithPopup,isLoading } = useAuth0();
+    const { loginWithRedirect, user,isLoading } = useAuth0();
 
     return (
-    <Grid item sx={{height:'100vh', width:'100%', padding:'20px'}}>
-        {user ? isLoading ? 
-            (<Grid container item sx={{
+    <>
+    {!mobile ? 
+    <>
+    {user ? 
+        <Grid item sx={{height:'100vh', width:'100%', padding:'20px'}}>
+            <Grid container item sx={{
                 fontSize:'25px',
                 alignItems:'center',
                 justifyContent:'center',
                 color:light ? "var(--zero)" : "var(--ceroN)",
-                marginTop:'250px'
+                gap:'10px',
+                borderBottom:`1px solid ${light ? "var(--zero)" : "var(--ceroN)" } `,
+                paddingBottom:'10px',
+                width:'91%',
+                marginLeft:'30px'
                 }}>
-                Cargando Datos...<Load size={60}/>
-            </Grid>)
-            : 
-            (<>
-                <Grid container item sx={{
-                    fontSize:'25px',
-                    alignItems:'center',
-                    justifyContent:'center',
-                    color:light ? "var(--zero)" : "var(--ceroN)",
-                    gap:'10px',
-                    borderBottom:`1px solid ${light ? "var(--zero)" : "var(--ceroN)" } `,
-                    paddingBottom:'10px',
-                    width:'91%',
-                    marginLeft:'30px'
-                    }}>
-                    Administrar<Progress size={20} />
-                </Grid>
-
+                Administrar<Progress size={20} />
+            </Grid>
                 <Grid item sx={{
                     marginTop:'10px',
                     display:'flex', 
@@ -69,64 +46,86 @@ const Manage = ({detalleARS, monto, tipo}) => {
                     justifyContent:'center', 
                     gap:'30px',
                     }}>
-                    {adminis ? <TarjetaUser admin={adminis}/> : 'hola'}
-                    <Form/>
+                    {adminis ? <TarjetaUser admin={adminis}/> : <SkeletonesOne/>}
+                    {adminis ? <Form/> : <SkeletonesForm/>}
                 </Grid>
-                <Grid>
-                {adminis?  <Tables /> : 'hola'}
-                </Grid>
-                </>
-            
-            // <Grid item container spacing={2} flexDirection={'row'} sx={{ paddingLeft: '16px', paddingTop: '10px' }}>
-            //     {adminis && <TarjetaUser admin={adminis} />}
-            //     <Box sx={{ height: "47vh", overflow: "auto", position: "relative",}}>
-            //         <Grid item container mt={2} px={2} direction="column" alignItems="center" sx={{ position: "relative" }}>
-            //             <Form />
-            //         </Grid>
-            //     </Box>
-            // </Grid>
-            // <Grid item container flexDirection={'row'}>
-            //     {!adminis && (<Grid item mt={6} ml={1} container direction="column" alignItems="center"><CircularProgress size={45} style={{ color: light ? "var(--zero)" : "var(--cero)" }} /></Grid>)}
-            //         <Box sx={{ height: "52vh", overflow: "auto", position: "relative",}}>
-            //             <Grid item container mt={2} px={2} direction="column" alignItems="center" sx={{ position: "relative" }}>
-            //                 {/* {filterTipo(admin,'+',).map((admi) => { */}
-            //                 {adminis && filterTipo(adminis, '+').map((admi) => (
-            //                     // return (
-            //                     <Tables admin={admi} opera={adminis} />
-            //                     // )
-            //                 ))}
-            //             </Grid>
-            //         </Box>
-            //         <Box sx={{ height: "52vh", overflow: "auto", position: "relative",}}>
-            //             <Grid item container mt={2} px={2} direction="column" alignItems="center" sx={{ position: "relative" }}>
-            //                 {/* {filterTipo(admin,'-').map((admi) => { */}
-            //                 {adminis && filterTipo(adminis, '-').map((admi) => (
-            //                     // return (
-            //                     <Tables admin={admi} opera={adminis} />
-            //                     // )
-            //                 ))}
-            //             </Grid>
-            //         </Box>
-            //     </Grid>
-                ):
-            (<Grid container item sx={{
-                fontSize:'25px',
-                alignItems:'center',
-                justifyContent:'center',
-                color:light ? "var(--zero)" : "var(--ceroN)",
-                marginTop:'250px',
+                    <Grid>
+                    {adminis?  <Tables /> : <Skeletones/>}
+                    </Grid>
+        </Grid> 
+    :   <Grid container item sx={{
+            fontSize: '25px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: light ? "var(--zero)" : "var(--ceroN)",
+            flexDirection: 'column',
+            }}>
+            {'Para acceder a esta sección'}
+            <Grid item sx={{ fontSize: '18px' }}>Por favor inice sesion</Grid>
+            <Grid
+                onClick={() => loginWithRedirect()}
+                sx={{ cursor: 'pointer' }}>
+                <User size={60} />
+            </Grid>
+        </Grid>}
+        </>
+    :
+    <>
+    {user ? 
+    <Grid container item sx={{
+        height: '190vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '15px'
+        }}>
+        <Grid container item sx={{
+            fontSize:'25px',
+            alignItems:'center',
+            justifyContent:'center',
+            color:light ? "var(--zero)" : "var(--ceroN)",
+            gap:'10px',
+            borderBottom:`1px solid ${light ? "var(--zero)" : "var(--ceroN)" } `,
+            paddingBottom:'10px',
+            width:'91%',
+            marginLeft:'30px'
+            }}>
+            Administrar<Progress size={20} />
+        </Grid>
+            <Grid item sx={{
+                marginTop:'10px',
+                display:'flex', 
                 flexDirection:'column',
+                alignItems:'center',
+                gap:'30px',
                 }}>
-                    {'Para acceder a esta sección'}
-                    <Grid item sx={{ fontSize:'18px'}}>Por favor inice sesion</Grid>
-                    <Grid 
-                        onClick={() => loginWithRedirect()} 
-                        sx={{cursor:'pointer'}}>
-                            <User size={60}/>
-                    </Grid> 
-            </Grid>) 
-        }       
+                {adminis ? <TarjetaUser admin={adminis}/> : <SkeletonesOne/>}
+                {adminis ? <Form/> : <SkeletonesForm/>}
+            </Grid>
+                <Grid>
+                    {adminis?  <Tables /> : <Skeletones/>}
+                </Grid>
     </Grid>
+        : <Grid container item sx={{
+            fontSize: '25px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: light ? "var(--zero)" : "var(--ceroN)",
+            marginTop: '250px',
+            flexDirection: 'column',
+            }}>
+            {'Para acceder a esta sección'}
+            <Grid item sx={{ fontSize: '18px' }}>Por favor inice sesion</Grid>
+                <Grid
+                    onClick={() => loginWithRedirect()}
+                    sx={{ cursor: 'pointer' }}>
+                    <User size={60} />
+                </Grid>
+        </Grid>} 
+    </> 
+        } 
+        </>      
     );
 };
 export default Manage;

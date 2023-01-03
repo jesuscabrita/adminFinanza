@@ -141,7 +141,7 @@ const Index = ({ last_update , value_buy, value_sell,}) => {
             </Grid>
         : 
                 <Grid container item sx={{
-                height:'130vh', 
+                height:'150vh', 
                 width:'100%', 
                 display:'flex', 
                 flexDirection:'column', 

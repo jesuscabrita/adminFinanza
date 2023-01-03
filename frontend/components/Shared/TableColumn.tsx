@@ -1,12 +1,12 @@
-import { Grid } from "@mui/material";
+import { Grid, useMediaQuery } from "@mui/material";
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { adminis, useAdmin } from "../../hooks/useAdmin";
+import { adminis } from "../../hooks/useAdmin";
 import { MdOutlineDeleteOutline as Dele } from "react-icons/md";
 import { AiTwotoneEdit as Editar } from 'react-icons/ai';
 import { delete_Admin, edit_Admin } from "../../lib/admin";
 import { useAuth0 } from '@auth0/auth0-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { filterTipo, formatoPorcentaje, moneda } from '../../utils/utils';
 import { GiWallet as Wallet } from 'react-icons/gi';
 import Swal from "sweetalert2";
@@ -17,7 +17,7 @@ import { IoIosAddCircleOutline as Plus } from "react-icons/io";
 import { FiAlertCircle as Pendiente } from 'react-icons/fi';
 import { FiAlertTriangle as NO } from 'react-icons/fi';
 import { MdAddTask as Pago } from "react-icons/md";
-
+import { ModalEdit } from "./ModalEdit";
 interface AdminProps {
     admin: adminis;
     opera;
@@ -25,6 +25,8 @@ interface AdminProps {
 export const TableColum: React.FC<AdminProps> =({admin,opera})=>{
     const { getAccessTokenSilently } = useAuth0();
     const [light] = useContext(Context);
+    const [open, setOpen] = useState(false);
+    const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
 
     const alertaDelete =()=>{
         Swal.fire({
@@ -49,15 +51,58 @@ export const TableColum: React.FC<AdminProps> =({admin,opera})=>{
         })
     }
 
-    const editAdmin = async (e) => {
-        e.preventDefault();
-        const token = await getAccessTokenSilently();
-        await edit_Admin({
-            detalleARS: admin.detalleARS,
-            monto: admin.monto,
-            pago:'no',
-            tipo: admin.tipo,
-        }, token)
+    const alertaEstadoCobro =()=>{
+        Swal.fire({
+            title: '¿Ya cobraste este Ingreso?',
+            showDenyButton: true,
+            confirmButtonText: 'Si',
+            denyButtonText: 'No',
+            customClass: {
+                actions: 'my-actions',
+                confirmButton: 'order-2',
+                denyButton: 'order-3',
+            }
+            }).then(async (result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Ingreso Cobrado!', '', 'success')
+                const token = await getAccessTokenSilently();
+                await edit_Admin({
+                detalleARS: admin.detalleARS,
+                monto: admin.monto,
+                pago:'no',
+                tipo: admin.tipo,
+                }, token)
+            } else if (result.isDenied) {
+                Swal.fire('Los cambios no se guardaron', '', 'info')
+            }
+            })
+    }
+
+    const alertaEstadoPago =()=>{
+        Swal.fire({
+            title: '¿Ya pagaste?',
+            showDenyButton: true,
+            confirmButtonText: 'Si',
+            denyButtonText: 'No',
+            customClass: {
+                actions: 'my-actions',
+                confirmButton: 'order-2',
+                denyButton: 'order-3',
+            }
+            }).then(async (result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Pagado!', '', 'success')
+                const token = await getAccessTokenSilently();
+                await edit_Admin({
+                detalleARS: admin.detalleARS,
+                monto: admin.monto,
+                pago:'no',
+                tipo: admin.tipo,
+                }, token)
+            } else if (result.isDenied) {
+                Swal.fire('Los cambios no se guardaron', '', 'info')
+            }
+            })
     }
 
     let egreso = filterTipo(opera, '-').reduce((acumulador, actual) => acumulador + actual.monto, 0)
@@ -110,24 +155,23 @@ export const TableColum: React.FC<AdminProps> =({admin,opera})=>{
                     alignItems:'center' ,
                     height:'100%',
                     width:'50%', 
-                    marginLeft:'150px',
+                    marginLeft:!mobile ? '150px': '50px',
                     borderRadius:'10px',
                     padding:'5px',
                     gap:'10px',
-                    cursor:'pointer',
                     color: light ? "var(--zero)" : "var(--ceroN)",
                     }}>
                         Cobrado<Wallet size={20}/>
                 </Grid> : null}
                 {admin.tipo === '+' && admin.pago === 'no' ? 
-                <Grid container onClick={editAdmin}
+                <Grid container onClick={alertaEstadoCobro}
                     sx={{
                     background:'var(--hazard)', 
                     justifyContent:'center',
                     alignItems:'center' ,
                     height:'100%',
                     width:'50%', 
-                    marginLeft:'150px',
+                    marginLeft:!mobile ? '150px': '50px',
                     borderRadius:'10px',
                     padding:'5px',
                     gap:'10px',
@@ -137,14 +181,14 @@ export const TableColum: React.FC<AdminProps> =({admin,opera})=>{
                         Pendiente<Pendiente size={20}/>
                 </Grid> : null}
                 {admin.tipo === '-' && admin.pago === 'no' ? 
-                <Grid container onClick={editAdmin}
+                <Grid container onClick={alertaEstadoPago}
                     sx={{
                     background:'var(--danger)', 
                     justifyContent:'center',
                     alignItems:'center' ,
                     height:'100%',
                     width:'50%', 
-                    marginLeft:'150px',
+                    marginLeft:!mobile ? '150px': '50px',
                     borderRadius:'10px',
                     padding:'5px',
                     gap:'10px',
@@ -161,11 +205,10 @@ export const TableColum: React.FC<AdminProps> =({admin,opera})=>{
                     alignItems:'center' ,
                     height:'100%',
                     width:'50%', 
-                    marginLeft:'150px',
+                    marginLeft:!mobile ? '150px': '50px',
                     borderRadius:'10px',
                     padding:'5px',
                     gap:'10px',
-                    cursor:'pointer',
                     color: light ? "var(--zero)" : "var(--ceroN)",
                     }}>
                         Pagado<Pago size={20}/>
@@ -180,7 +223,8 @@ export const TableColum: React.FC<AdminProps> =({admin,opera})=>{
                         justifyContent:'end' 
                         }}>
                         <Editar 
-                            size={20} 
+                            size={20}
+                            onClick={() => setOpen(true)} 
                             style={{
                                 cursor:'pointer',
                                 color:light ? "var(--zero)" : "var(--ceroN)",
@@ -194,6 +238,12 @@ export const TableColum: React.FC<AdminProps> =({admin,opera})=>{
                                 }}/>
                 </Grid>
             </TableCell>
+            {open && 
+                <ModalEdit 
+                    open={open} 
+                    setOpen={setOpen}
+                    admin={admin}
+                    />}
     </TableRow>
         
     )

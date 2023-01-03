@@ -24,16 +24,16 @@ export const Tables = () => {
         }
 
     const columns: readonly Column[] = [
-        { id: 'Ingreso / Egreso', label: 'Ingreso / Egreso', minWidth: 300 },
-        { id: 'Monto', label: 'Monto', minWidth: 100 },
-        { id: 'Moneda', label: 'Moneda', minWidth: 170, align: 'right',},
-        { id: 'Estatus', label: 'Estatus', minWidth: 270, align: 'right',},
-        { id: 'Accion', label: 'Accion', minWidth:170, align: 'right',},
+        { id: 'Ingreso / Egreso', label: 'Ingreso / Egreso', minWidth:!mobile ? 300 : 190 },
+        { id: 'Monto', label: 'Monto', minWidth:!mobile ? 80 : 40 },
+        { id: 'Moneda', label: 'Moneda', minWidth:!mobile ? 100 : 20, align: 'right',},
+        { id: 'Estatus', label: 'Estatus', minWidth:!mobile ? 200 : 250, align: 'right',},
+        { id: 'Accion', label: 'Accion', minWidth:!mobile ? 150 : 100, align: 'right',},
         ];
 
     return (
-    <Paper sx={{ width: '100%', overflow: 'hidden', marginTop:'10px' }}>
-        <TableContainer sx={{ maxHeight: 300 }}>
+    <Paper sx={{ width: !mobile ? '100%': '330px', overflow: 'hidden', marginTop:'10px' }}>
+        <TableContainer sx={{ maxHeight: !mobile ? 300 : 500 }}>
             <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                     <TableRow>
