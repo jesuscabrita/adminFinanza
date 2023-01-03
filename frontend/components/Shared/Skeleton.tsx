@@ -34,3 +34,17 @@ export const SkeletonesForm =()=>{
     </Box>
     )
 }
+export const SkeletonesCambio =()=>{
+    const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
+    return(
+        <Box sx={{ width:!mobile ? '600px' : '330px' }}>
+            <Skeleton animation='wave' sx={{height:'100px',marginBottom:'-35px'}} />
+            <Skeleton animation="wave" sx={{height:'100px',marginBottom:'-35px'}} />
+            <Skeleton animation="wave" sx={{height:'100px',marginBottom:'-35px'}} />
+            <Skeleton animation="wave" sx={{height:'100px',marginBottom:'-35px'}} />
+            <Skeleton animation="wave" sx={{height:'100px',marginBottom:'-35px'}} />
+            <Skeleton animation="wave" sx={{height:'100px',marginBottom:'-35px'}} />
+            <Skeleton animation="wave" sx={{height:'100px',marginBottom:'-35px'}} />
+    </Box>
+    )
+}

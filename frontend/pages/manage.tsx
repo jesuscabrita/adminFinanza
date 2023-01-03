@@ -1,20 +1,16 @@
 import { Grid, useMediaQuery } from "@mui/material";
-import { useContext, useState } from "react";
-import { useQuery } from "react-query";
+import { useContext } from "react";
 import { Form } from "../components/Shared/Form";
 import { Tables } from "../components/Shared/Table";
 import { TarjetaUser } from "../components/Shared/TarjetaUser";
 import Context from "../context/contextPrincipal";
 import { useAdmin } from "../hooks/useAdmin";
-import { adminGet } from "../service/adminService";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { useAuth0 } from "@auth0/auth0-react";
-import { BiLoader as Load} from 'react-icons/bi';
 import { FaUserCircle as User } from 'react-icons/fa';
 import { GiProgression as Progress } from "react-icons/gi";
 import { Skeletones, SkeletonesForm, SkeletonesOne } from "../components/Shared/Skeleton";
 
-const Manage = ({detalleARS, monto, tipo}) => {
+const Manage = () => {
     const [light] = useContext(Context);
     const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
     const { data: adminis, mutate } = useAdmin();

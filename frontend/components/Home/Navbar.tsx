@@ -19,7 +19,6 @@ import IconButton from "@mui/material/IconButton";
 import { VscChromeClose as Exit } from "react-icons/vsc";
 import { AiOutlineNotification as Noti } from "react-icons/ai";
 import { ButtonNav, ButtonNavbar } from "./ButtonNavbar";
-import { BsGraphUp as Grafica } from "react-icons/bs";
 import { GiProgression as Progress } from "react-icons/gi";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AiOutlineLogin as Login } from "react-icons/ai";
@@ -141,7 +140,6 @@ export const Navbar: React.FC = () => {
               <Menuitem icon={<Home size={20} />}><ButtonNav href="/">Home</ButtonNav></Menuitem>
               <Menuitem icon={<Progress size={20} />}><ButtonNav href="/manage">Administrar</ButtonNav></Menuitem>
               <Menuitem icon={<Circle size={20} />}><ButtonNav href="/cambio">Cambio</ButtonNav></Menuitem>
-              <Menuitem icon={<Grafica size={20} />}><ButtonNav href="/evolucion">Evolucion</ButtonNav></Menuitem>
               <SubMenu title="Informacion" icon={<Info size={20} />}>
                 <Menuitem><ButtonNav href="/noticias">Noticias</ButtonNav></Menuitem>
               </SubMenu>
@@ -188,9 +186,6 @@ export const Navbar: React.FC = () => {
                 </Grid>
                 <Grid>
                   <ButtonNavbar href="/cambio"><Circle size={20} />Cambio</ButtonNavbar>
-                </Grid>
-                <Grid>
-                  <ButtonNavbar href="/evolucion"><Grafica size={20} />Evolucion</ButtonNavbar>
                 </Grid>
                 <Grid sx={{ color: "var(--cero2)", marginTop: "10px" }} className="flex items-center px-4 gap-2 py-2 text-lg mt-1.5 text-gray-900">
                   <Info size={20} /> Informacion
