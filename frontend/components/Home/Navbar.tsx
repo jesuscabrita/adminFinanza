@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { GoHome as Home } from "react-icons/go";
-import { GoGear as Setting } from "react-icons/go";
+import { BsFillBookmarkHeartFill as Setting } from "react-icons/bs";
 import { RiExchangeDollarLine as Circle } from "react-icons/ri";
 import { GoInfo as Info } from "react-icons/go";
 import { BsArrowLeftCircle as ArrowLeft } from "react-icons/bs";
@@ -143,7 +143,7 @@ export const Navbar: React.FC = () => {
               <SubMenu title="Informacion" icon={<Info size={20} />}>
                 <Menuitem><ButtonNav href="/noticias">Noticias</ButtonNav></Menuitem>
               </SubMenu>
-              <Menuitem icon={<Setting size={20} />}><ButtonNav href="/configuracion">Configuracion</ButtonNav></Menuitem>
+              <Menuitem icon={<Setting size={20} />}><ButtonNav href="/calificacion">Calificación</ButtonNav></Menuitem>
             {user && 
                 <Menuitem icon={<Cerrar size={20} />}>
                   <Grid onClick={() => logout({ returnTo: window.location.origin })}>
@@ -194,7 +194,7 @@ export const Navbar: React.FC = () => {
                   <ButtonNavbar href="/noticias"><Noti size={20} />Noticias</ButtonNavbar>
                 </Grid>
                 <Grid sx={{ marginBottom: "15px" }}>
-                  <ButtonNavbar href="/configuracion"><Setting size={20} />Configuracion</ButtonNavbar>
+                  <ButtonNavbar href="/calificacion"><Setting size={20} />Calificación</ButtonNavbar>
                 </Grid>
                 <Grid onClick={() => logout({ returnTo: window.location.origin })} sx={{ marginBottom: "15px" }}>
                   <ButtonNavbar href=""><Cerrar size={20} />Cerrar Sesion</ButtonNavbar>

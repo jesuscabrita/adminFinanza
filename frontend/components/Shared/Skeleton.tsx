@@ -23,6 +23,21 @@ export const SkeletonesOne =()=>{
     </Box>
     )
 }
+export const SkeletonesNoti =()=>{
+    const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
+    return(
+        <>
+        <Box sx={{ width: !mobile ? '95%' : '330px' }}>
+            <Skeleton animation='wave' sx={{height:'70px',marginBottom:!mobile ?'-70px' :'-120px'}} />
+            <Skeleton animation="wave" sx={{height:!mobile ? '310px':'670px',marginBottom:!mobile ? '-35px': '-80px'}} />
+        </Box>
+        <Box mt={-7} sx={{ width: !mobile ? '95%' : '330px' }}>
+            <Skeleton animation='wave' sx={{height:'70px',marginBottom:!mobile ?'-70px' :'-120px'}} />
+            <Skeleton animation="wave" sx={{height:!mobile ? '310px':'670px',marginBottom:!mobile ? '-35px': '-80px'}} />
+        </Box>
+        </>
+    )
+}
 export const SkeletonesForm =()=>{
     const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
     return(
