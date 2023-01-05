@@ -12,6 +12,11 @@ import { divisa_delete } from "./routes/divisa/divisaDelete";
 import { divisa_create } from "./routes/divisa/divisaCreate";
 import { admin_Edit } from "./routes/admin/adminEdit";
 import { divisa_Edit } from "./routes/divisa/divisaEdit";
+import { calificacion_list } from "./routes/calificacion/calificacionList";
+import { calificacion_get } from "./routes/calificacion/calificacionGet";
+import { calificacion_delete } from "./routes/calificacion/calificacionDelete";
+import { calificacion_create } from "./routes/calificacion/calificacionCreate";
+import { calificacion_Edit } from "./routes/calificacion/calificacionEdit";
 
 const admin_plugin: FastifyPluginAsync = async (app) => {
   app.addHook("preValidation", app.authenticate);
@@ -29,6 +34,14 @@ const divisa_plugin: FastifyPluginAsync =async (app) =>{
   app.register(divisa_create);
   app.register(divisa_Edit);
 };
+const calificacion_plugin: FastifyPluginAsync =async (app) =>{
+  app.addHook("preValidation", app.authenticate);
+  app.register(calificacion_list);
+  app.register(calificacion_get);
+  app.register(calificacion_delete);
+  app.register(calificacion_create);
+  app.register(calificacion_Edit);
+};
 export const app: FastifyPluginAsync = async (app) => {
   await app.register(auth0Verify, {
     domain: "dev-jesuscabrita.us.auth0.com",
@@ -39,4 +52,5 @@ export const app: FastifyPluginAsync = async (app) => {
   app.register(fastifyCors);
   app.register(admin_plugin, { prefix: "/admin" });
   app.register(divisa_plugin, { prefix: "/divisa" });
+  app.register(calificacion_plugin, { prefix: "/calificacion" });
 };
