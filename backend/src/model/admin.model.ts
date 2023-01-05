@@ -1,5 +1,4 @@
 import { Document, model, Schema } from "mongoose";
-import { DivisaDocument } from "./divisa.model";
 
 export interface AdminDocument extends Document {
     detalleARS: string;
@@ -7,7 +6,6 @@ export interface AdminDocument extends Document {
     tipo: string;
     pago: string;
     user_id?: string;
-    divisa: DivisaDocument['_id']
 }
 
 const schema = new Schema(
@@ -17,7 +15,6 @@ const schema = new Schema(
         tipo: { type: String, required: true },
         pago: { type: String },
         user_id: { type: String },
-        divisa:{ type : Schema.Types.ObjectId, ref:'divisa'}
     },
     { timestamps: true }
 );
