@@ -1,13 +1,13 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { Grid } from '@mui/material';
-import { filterPago, filterTipo } from '../../utils/utils';
+import { filterDuo } from '../../utils/utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const Resumen =({admin})=>{
-    let ingreso =filterTipo(admin, '+').reduce((acumulador, actual) => acumulador + actual.monto, 0)
-    let egreso = filterPago(admin, 'si').reduce((acumulador, actual) => acumulador + actual.monto, 0)
+    let ingreso = filterDuo(admin, 'si','+').reduce((acumulador, actual) => acumulador + actual.monto, 0)
+    let egreso = filterDuo(admin, 'si','-').reduce((acumulador, actual) => acumulador + actual.monto, 0)
     
     const data = {
         labels: ['Ingreso', 'Egreso'],
