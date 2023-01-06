@@ -6,8 +6,7 @@ import StarIcon from '@mui/icons-material/Star';
 import Context from "../../context/contextPrincipal";
 import { useContext } from "react";
 
-export const Estrellas =()=>{
-    const [value, setValue] = useState<number | null>(2.5);
+export const Estrellas =({value,setValue })=>{
     const [hover, setHover] = useState(-1);
     const [light] = useContext(Context);
 
@@ -43,7 +42,8 @@ export const Estrellas =()=>{
     </Box>
     )
 }
-export const EstrellaDisable =()=>{
+export const EstrellaDisable =({valor})=>{
+    const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
     const labels: { [index: string]: string } = {
         0.5: 'Malo',
         1: 'Malo+',
@@ -57,13 +57,12 @@ export const EstrellaDisable =()=>{
         5: 'Excelente+',
         };
 
-        const value = 3.5;
-
     return(
-        <Box sx={{width: 200 ,display: 'flex',alignItems: 'center',}}>
+        <Box sx={{display: 'flex',alignItems: 'center',}}>
             <Rating
+                style={{fontSize: mobile ? '10px' :'25px'}}
                 name="text-feedback"
-                value={value}
+                value={valor}
                 readOnly
                 precision={0.5}
                 emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}

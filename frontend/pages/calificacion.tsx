@@ -1,5 +1,5 @@
 import { Grid, useMediaQuery } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Context from "../context/contextPrincipal";
 import { BsFillBookmarkHeartFill as Calif } from "react-icons/bs";
 import { Estrellas } from "../components/Shared/Start";
@@ -8,11 +8,48 @@ import { MdPostAdd as Idd } from "react-icons/md";
 import { Comentario } from "../components/Shared/TarjetaComentario";
 import { useAuth0 } from "@auth0/auth0-react";
 import { FaUserCircle as User } from 'react-icons/fa';
+import { useCalificacion } from "../hooks/useCalificacion";
+import { create_Calificacion } from "../lib/calificacion";
+import { filterArrayComen, goToPage, next, previous } from "../utils/utils";
+import { Paginacion } from "../components/Shared/Pagination";
+import Swal from "sweetalert2";
+import { SkeletonesOne } from "../components/Shared/Skeleton";
 
 const Calificacion = () => {
     const [light] = useContext(Context);
     const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
-    const { loginWithRedirect, user,isLoading } = useAuth0();
+    const { loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
+    const { data: calific, mutate } = useCalificacion();
+    const [comentario, setComentario] = useState('');
+    const [valor, setValor] = useState(1);
+    const [page, setPage]= useState(1);
+    const [current, setCurrent]= useState(3);
+
+    const handleChange = (event) => {
+        setComentario(event.target.value);
+    };
+
+    const alertaCalifica = async(submit)=>{
+        if(submit){
+            Swal.fire({
+                icon: 'success',
+                title: 'Nueva calificación'
+            })
+        } 
+        
+    }
+
+    const submitCalific = async (e)=>{
+        e.preventDefault();
+        const token = await getAccessTokenSilently();
+        await create_Calificacion({
+            comentario,
+            valor,
+        }, token)
+        alertaCalifica(create_Calificacion)
+        setComentario('')
+        setValor(3)
+    }
 
     return (
     <>
@@ -40,8 +77,13 @@ const Calificacion = () => {
                     gap:'30px',
                     }}>
                     {user ? <>
-                            <Estrellas />
+                            <Estrellas
+                            setValue={setValor}
+                            value={valor}
+                            />
                             <TextareaAutosize
+                                value={comentario}
+                                onChange={handleChange}
                                 style={{
                                     width: '50%',
                                     height: '100px',
@@ -50,7 +92,7 @@ const Calificacion = () => {
                                     color: light ? "var(--zero)" : "var(--ceroN)",
                                 }} />
                     <Grid item container mt={-3}
-                    // onClick={submit} 
+                    onClick={submitCalific} 
                     sx={{ 
                         background: "var(--primario)", 
                         width: "70px", 
@@ -80,8 +122,19 @@ const Calificacion = () => {
                             sx={{ cursor: 'pointer' }}>
                             <User size={60} />
                         </Grid>
-                    </Grid>}               
-                    <Comentario/>
+                    </Grid>}
+                    {calific ? filterArrayComen(current,'', calific, 2).map((e)=>(
+                        <Comentario calificacion={e}/>
+                    )): <SkeletonesOne/>}
+                    <Paginacion
+                    count={Math.round(calific?.filter(info=> info.comentario.includes('')).length / 2)}
+                    hidden
+                    onChange={e => goToPage(setPage, setCurrent, e.target.innerText, 2)}
+                    buttonNext={()=> next(setPage, page, '', setCurrent, current, calific, 2)}
+                    buttonPrevious={()=> previous(setPage, page, setCurrent, current,2)}
+                    page={page}
+                    end
+                    />
                 </Grid>
         </Grid>
     : 
@@ -116,8 +169,13 @@ const Calificacion = () => {
                     gap:'30px',
                     }}>
                 {user ? <>        
-                    <Estrellas/>
-                    <TextareaAutosize 
+                        <Estrellas
+                        setValue={setValor}
+                        value={valor}
+                        />
+                    <TextareaAutosize
+                        value={comentario}
+                        onChange={handleChange}
                         style={{
                             width: !mobile ? '50%' : '330px',
                             height:!mobile ? '100px' : '200px',
@@ -127,7 +185,7 @@ const Calificacion = () => {
                         }}
                     />
                     <Grid item container mt={-3}
-                    // onClick={submit} 
+                    onClick={submitCalific} 
                     sx={{ 
                         background: "var(--primario)", 
                         width: "70px", 
@@ -158,7 +216,18 @@ const Calificacion = () => {
                             <User size={60} />
                         </Grid>
                     </Grid>} 
-                    <Comentario/>
+                    {calific ? filterArrayComen(current,'', calific, 2).map((e)=>(
+                        <Comentario calificacion={e}/>
+                    )): <SkeletonesOne/>}
+                    <Paginacion
+                    count={Math.round(calific?.filter(info=> info.comentario.includes('')).length / 2)}
+                    hidden
+                    onChange={e => goToPage(setPage, setCurrent, e.target.innerText, 2)}
+                    buttonNext={()=> next(setPage, page, '', setCurrent, current, calific, 2)}
+                    buttonPrevious={()=> previous(setPage, page, setCurrent, current,2)}
+                    page={page}
+                    end
+                    />
                 </Grid>
 
         </Grid>

@@ -1,7 +1,6 @@
 import useSWR from "swr";
 
 export interface adminis {
-    map(arg0: (e: any) => any): any;
     detalleARS: string;
     monto: number;
     tipo: string;

@@ -17,14 +17,15 @@ export const calificacion_create: FastifyPluginAsync = async (app) => {
         throw new BadRequest("Comentario no definido");
         }
 
-        if (isEmpty(valor)) {
-        throw new BadRequest("Valor no definido");
-        }
+        // if (isEmpty(valor)) {
+        // throw new BadRequest("Valor no definido");
+        // }
 
         const doc = await CalificacionModel.create({
         comentario,
         valor,
         user_id: (req.user as any).sub,
+        name: (req.user as any).name,
         });
 
         return doc;
