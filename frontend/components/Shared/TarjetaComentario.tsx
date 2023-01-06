@@ -21,6 +21,8 @@ export const Comentario =({calificacion})=>{
     const [light] = useContext(Context);
     const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
     const { user, getAccessTokenSilently } = useAuth0();
+    const administrador = user.sub === 'linkedin|hZJgKWBXCL';
+    
 
     const alertaDelete =()=>{
         Swal.fire({
@@ -72,7 +74,7 @@ export const Comentario =({calificacion})=>{
                 </Grid>
                 <EstrellaDisable valor={calificacion.valor} />
                 <Grid container justifyContent={'end'}>
-                <Dele onClick={alertaDelete} size={20} style={{ cursor: 'pointer', color: "var(--ceroN)", }} />
+                {administrador ?  <Dele onClick={alertaDelete} size={20} style={{ cursor: 'pointer', color: "var(--ceroN)", }} /> : null }
                 </Grid>
                     </>
                 :
@@ -85,9 +87,9 @@ export const Comentario =({calificacion})=>{
                 <Grid sx={{display:'flex'}}>
                     <EstrellaDisable valor={calificacion.valor} />
                 </Grid>
-                    <Grid sx={{display:'flex'}}>
+                {administrador ? <Grid sx={{display:'flex'}}>
                         <Dele onClick={alertaDelete} size={20} style={{ cursor: 'pointer', color: "var(--ceroN)", }} /> 
-                    </Grid>
+                    </Grid> : null} 
                 </Grid>}
     
             </Grid>

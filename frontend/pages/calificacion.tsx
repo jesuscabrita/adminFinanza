@@ -21,9 +21,9 @@ const Calificacion = () => {
     const { loginWithRedirect, user, isLoading, getAccessTokenSilently } = useAuth0();
     const { data: calific, mutate } = useCalificacion();
     const [comentario, setComentario] = useState('');
-    const [valor, setValor] = useState(1);
+    const [valor, setValor] = useState(3);
     const [page, setPage]= useState(1);
-    const [current, setCurrent]= useState(3);
+    const [current, setCurrent]= useState(0);
 
     const handleChange = (event) => {
         setComentario(event.target.value);
@@ -35,8 +35,12 @@ const Calificacion = () => {
                 icon: 'success',
                 title: 'Nueva calificación'
             })
-        } 
-        
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Error'
+                })
+        }
     }
 
     const submitCalific = async (e)=>{
