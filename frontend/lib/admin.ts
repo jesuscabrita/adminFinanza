@@ -27,3 +27,10 @@ export const edit_Admin = async (data: AdminPostData, token: string) => {
     });
     return res.data;
 };
+
+export const deleteAll_Admin = async (token: string)=>{
+    const res = await api3.delete(`/admin/delete-all`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+}

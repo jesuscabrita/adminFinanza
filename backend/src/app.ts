@@ -12,6 +12,7 @@ import { calificacion_get } from "./routes/calificacion/calificacionGet";
 import { calificacion_delete } from "./routes/calificacion/calificacionDelete";
 import { calificacion_create } from "./routes/calificacion/calificacionCreate";
 import { calificacion_Edit } from "./routes/calificacion/calificacionEdit";
+import { admin_deleteAll } from "./routes/admin/adminAllDelete";
 
 const admin_plugin: FastifyPluginAsync = async (app) => {
   app.addHook("preValidation", app.authenticate);
@@ -20,6 +21,7 @@ const admin_plugin: FastifyPluginAsync = async (app) => {
   app.register(admin_delete);
   app.register(admin_create);
   app.register(admin_Edit);
+  app.register(admin_deleteAll);
 };
 const calificacion_plugin: FastifyPluginAsync =async (app) =>{
   app.addHook("preValidation", app.authenticate);

@@ -9,12 +9,37 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { FaUserCircle as User } from 'react-icons/fa';
 import { GiProgression as Progress } from "react-icons/gi";
 import { Skeletones, SkeletonesForm, SkeletonesOne } from "../components/Shared/Skeleton";
+import { deleteAll_Admin } from "../lib/admin";
+import Swal from "sweetalert2";
 
 const Manage = () => {
     const [light] = useContext(Context);
     const mobile = useMediaQuery("(max-width:600px)", { noSsr: true });
     const { data: adminis, mutate } = useAdmin();
-    const { loginWithRedirect, user,isLoading } = useAuth0();
+    const { loginWithRedirect, user,isLoading, getAccessTokenSilently } = useAuth0();
+
+    const alertaDeleteAll =()=>{
+        Swal.fire({
+            title: 'Estas seguro que quieres eliminar todo?',
+            text: "¡Puedes eliminarlos individualmente en la tabla!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#256d85',
+            cancelButtonColor: '#b74848',
+            cancelButtonText:'Calcelar',
+            confirmButtonText: '¡Sí, Eliminar!',
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'Se han eliminados!',
+                    'Sus archivos han sido eliminados.',
+                    'success'
+                    )
+                    const token = await getAccessTokenSilently();
+                    await deleteAll_Admin(token)    
+            }
+        })
+    }
 
     return (
     <>
@@ -48,6 +73,24 @@ const Manage = () => {
                     <Grid>
                     {adminis?  <Tables /> : <Skeletones/>}
                     </Grid>
+
+                    {adminis? <Grid container justifyContent={'start'}>
+                    <Grid 
+                    mt={0.5}
+                    onClick={alertaDeleteAll} 
+                    sx={{
+                        cursor:'pointer',
+                        background:'var(--danger)',
+                        color:'var(--cero)',
+                        padding:'4px',
+                        borderRadius:'10px',
+                        fontSize:'6px'
+                        
+                    }}>
+                        Eliminar todo
+                </Grid>
+                </Grid> : null}
+
         </Grid> 
     :   <Grid container item sx={{
             fontSize: '25px',
@@ -102,6 +145,20 @@ const Manage = () => {
                 <Grid>
                     {adminis?  <Tables /> : <Skeletones/>}
                 </Grid>
+                {adminis ?<Grid 
+                    mt={3}
+                    onClick={alertaDeleteAll} 
+                    sx={{
+                        cursor:'pointer',
+                        background:'var(--danger)',
+                        color:'var(--cero)',
+                        padding:'5px',
+                        borderRadius:'10px',
+                        fontSize:'10px'
+                        
+                    }}>
+                        Eliminar todo
+                </Grid> : null}
     </Grid>
         : <Grid container item sx={{
             fontSize: '25px',

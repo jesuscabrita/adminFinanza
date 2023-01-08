@@ -33,7 +33,7 @@ export const Tables = () => {
 
     return (
     <Paper sx={{ width: !mobile ? '100%': '330px', overflow: 'hidden', marginTop:'10px' }}>
-        <TableContainer sx={{ maxHeight: !mobile ? 300 : 500 }}>
+        <TableContainer sx={{ maxHeight: !mobile ? 285 : 500 }}>
             <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                     <TableRow>
