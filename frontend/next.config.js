@@ -14,8 +14,8 @@ module.exports = () => {
                 source: "/apievoluciondolarblue",
                 destination: "https://api-dolar-argentina.herokuapp.com/api/evolucion/dolarblue",
             },{
-                source: "/apievoluciondolaroficial",
-                destination: "https://api-dolar-argentina.herokuapp.com/api/evolucion/dolaroficial",
+                source: "/apinoticias",
+                destination: "https://newsapi.org/v2/",
             }
         ];
     };
